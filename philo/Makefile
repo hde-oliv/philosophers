@@ -1,10 +1,10 @@
-SRC		:=	main.c
+SRC	:=	main.c
 
-OBJ		:=	$(SRC:.c=.o)
+OBJ	:=	$(SRC:.c=.o)
 
 CC		:=	cc
 
-CFLAGS	+=	-Wall -Wextra -Werror -pthreads
+CFLAGS	+=	-Wall -Wextra -Werror -pthread
 
 RM		:=	rm -rf
 
@@ -15,8 +15,8 @@ all:		$(NAME)
 .c.o:
 			$(CC) $(CFLAGS) -c $< -o $@
 
-$(NAME):	$(OBJS)
-			$(CC) $(OBJS) $(CFLAGS) -o $(NAME)
+$(NAME):	$(OBJ)
+			$(CC) $(OBJ) $(CFLAGS) -o $(NAME)
 
 clean:
 			$(RM) $(OBJ)
@@ -25,5 +25,11 @@ fclean: 	clean
 			$(RM) $(NAME)
 
 re: 		fclean all
+
+run:		all
+			./philo
+
+rerun:		re
+			./philo
 
 .PHONY: 	all clean fclean re
