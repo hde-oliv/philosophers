@@ -12,7 +12,7 @@
 
 #include "philo.h"
 
-static int	must_continue(t_data *data)
+int	must_continue(t_data *data)
 {
 	int		i;
 	int		eaten;

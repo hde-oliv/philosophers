@@ -44,7 +44,7 @@ static int	take_first_fork(t_philo *philo)
 
 static int	take_second_fork(t_philo *philo)
 {
-	if (philo->second_fork)
+	if (philo->second_fork || (philo->args)[T_PHILO] == 1)
 		return (1);
 	if (philo->number % (philo->args)[T_PHILO] == 0)
 	{
