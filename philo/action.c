@@ -14,18 +14,28 @@
 
 static int	take_first_fork(t_philo *philo)
 {
+	if (philo->first_fork)
+		return (1);
 	if (philo->number % (philo->args)[T_PHILO] == 0)
 	{
 		if (!pthread_mutex_lock((philo->mutexes)[philo->number % \
 												(philo->args)[T_PHILO]]))
+		{
 			p_take_a_fork(philo);
+			philo->first_fork = 1;
+			return (0);
+		}
 		else
 			return (1);
 	}
 	else
 	{
 		if (!pthread_mutex_lock((philo->mutexes)[philo->number - 1]))
+		{
 			p_take_a_fork(philo);
+			philo->first_fork = 1;
+			return (0);
+		}
 		else
 			return (1);
 	}
@@ -34,10 +44,16 @@ static int	take_first_fork(t_philo *philo)
 
 static int	take_second_fork(t_philo *philo)
 {
+	if (philo->second_fork)
+		return (1);
 	if (philo->number % (philo->args)[T_PHILO] == 0)
 	{
 		if (!pthread_mutex_lock((philo->mutexes)[philo->number - 1]))
+		{
 			p_take_a_fork(philo);
+			philo->second_fork = 1;
+			return (0);
+		}
 		else
 			return (1);
 	}
@@ -45,7 +61,11 @@ static int	take_second_fork(t_philo *philo)
 	{
 		if (!pthread_mutex_lock((philo->mutexes)[philo->number % \
 												(philo->args)[T_PHILO]]))
+		{
 			p_take_a_fork(philo);
+			philo->second_fork = 1;
+			return (0);
+		}
 		else
 			return (1);
 	}
@@ -93,15 +113,22 @@ int	do_action(t_action ac, t_philo *philo)
 		usleep(philo->args[T_EAT] * 1000);
 		pthread_mutex_unlock((philo->mutexes)[philo->number % \
 											(philo->args)[T_PHILO]]);
+		philo->first_fork = 0;
 		pthread_mutex_unlock((philo->mutexes)[philo->number - 1]);
+		philo->second_fork = 0;
 	}
 	else if (ac == SLEEP)
 	{
 		time = get_timestamp();
 		if ((time + philo->args[T_SLEEP]) > (size_t)(philo->last_meal + \
 											philo->args[T_DIE]))
+		{
+			philo->data->died = philo->number;
 			return (0);
+		}
+		p_sleep(philo);
 		usleep(philo->args[T_SLEEP] * 1000);
+		p_think(philo);
 	}
 	return (1);
 }

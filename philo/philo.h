@@ -65,6 +65,8 @@ typedef struct s_philo
 	int				times_eaten;
 	size_t			start_time;
 	t_data			*data;
+	int				first_fork;
+	int				second_fork;
 	pthread_mutex_t	**mutexes;
 }	t_philo;
 
@@ -101,6 +103,7 @@ void		create_array_of_philo_data(t_philo ***p_arr, \
 
 // Watcher
 void		create_watcher(t_data *data);
+void		destroy_everything(t_data *data);
 
 // Action
 int			do_action(t_action ac, t_philo *philo);

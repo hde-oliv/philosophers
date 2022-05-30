@@ -38,21 +38,21 @@ t_philo	*create_philo_data(int *args, int number, t_data *data)
 	philo->times_eaten = 0;
 	philo->data = data;
 	philo->mutexes = data->mutexes;
+	philo->first_fork = 0;
+	philo->second_fork = 0;
 	return (philo);
 }
 
 void	create_array_of_philo_data(t_philo ***p_arr, int arr[5], t_data **data)
 {
 	int		i;
-	t_philo	**philos;
 
-	philos = *p_arr;
-	philos = (t_philo **)malloc(sizeof(t_philo *) * arr[0]);
+	(*p_arr) = (t_philo **)malloc(sizeof(t_philo *) * arr[0]);
 	i = arr[0] - 1;
 	while (i != -1)
 	{
-		philos[i] = create_philo_data(arr, i, *data);
+		(*p_arr)[i] = create_philo_data(arr, i, *data);
 		i--;
 	}
-	(*data)->t_philos = philos;
+	(*data)->t_philos = *p_arr;
 }

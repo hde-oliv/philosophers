@@ -19,15 +19,15 @@ static void	*philo_routine(void *philo_data)
 	philo = (t_philo *)philo_data;
 	while (!philo->data->died && ((philo->args)[T_LOOP] != 0))
 	{
-		if (!do_action(FIRST_FORK, philo))
+		if (!philo->data->died && !do_action(FIRST_FORK, philo))
 			break ;
-		if (!do_action(SECOND_FORK, philo))
+		if (!philo->data->died && !do_action(SECOND_FORK, philo))
 			break ;
-		if (!do_action(EAT, philo))
+		if (!philo->data->died && !do_action(EAT, philo))
 			break ;
-		if (!do_action(SLEEP, philo))
+		if (!philo->data->died && !do_action(SLEEP, philo))
 			break ;
-		if (!do_action(THINK, philo))
+		if (!philo->data->died && !do_action(THINK, philo))
 			break ;
 	}
 	return (NULL);
@@ -56,5 +56,6 @@ int	start_simulation(int arr[5])
 	i = arr[0];
 	while (i-- != 0)
 		pthread_join(*(data->philos)[i], NULL);
+	destroy_everything(data);
 	return (1);
 }

@@ -12,7 +12,7 @@
 
 #include "philo.h"
 
-int	must_continue(t_data *data)
+static int	must_continue(t_data *data)
 {
 	int		i;
 	int		eaten;
@@ -25,13 +25,14 @@ int	must_continue(t_data *data)
 	{
 		if ((philos[i])->times_eaten == (data->args)[T_LOOP])
 			eaten++;
+		i--;
 	}
 	if (eaten == (data->args)[T_PHILO])
 		return (0);
 	return (1);
 }
 
-static void	destroy_everything(t_data *data)
+void	destroy_everything(t_data *data)
 {
 	int		i;
 	t_philo	**philos;
@@ -44,6 +45,7 @@ static void	destroy_everything(t_data *data)
 		free((data->mutexes)[i]);
 		free((data->philos)[i]);
 		free(philos[i]);
+		i--;
 	}
 	free(data->mutexes);
 	free(data->philos);
@@ -59,7 +61,8 @@ static void	*watcher_routine(void *watcher_data)
 	while (!data->died && must_continue(data))
 		usleep(1000);
 	if (data->died)
-		destroy_everything(data);
+		p_die((((t_philo **)data->t_philos))[data->died - 1]);
+	data->died = 1;
 	return (NULL);
 }
 
