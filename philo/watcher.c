@@ -18,16 +18,18 @@ int	must_continue(t_data *data)
 	int		eaten;
 	t_philo	**philos;
 
+	if ((data->args[T_LOOP]) == -1)
+		return (1);
 	i = (data->args[T_PHILO]) - 1;
 	eaten = 0;
 	philos = data->t_philos;
 	while (i != -1)
 	{
-		if ((philos[i])->times_eaten == (data->args)[T_LOOP])
+		if ((philos[i])->times_eaten >= (data->args)[T_LOOP])
 			eaten++;
 		i--;
 	}
-	if (eaten == (data->args)[T_PHILO])
+	if (eaten >= (data->args)[T_PHILO])
 		return (0);
 	return (1);
 }
@@ -61,7 +63,10 @@ static void	*watcher_routine(void *watcher_data)
 	while (!data->died && must_continue(data))
 		usleep(1000);
 	if (data->died)
+	{
 		p_die((((t_philo **)data->t_philos))[data->died - 1]);
+		return (NULL);
+	}
 	data->died = 1;
 	return (NULL);
 }
