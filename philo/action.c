@@ -14,62 +14,38 @@
 
 static int	take_first_fork(t_philo *philo)
 {
-	if (philo->first_fork)
-		return (1);
-	if (philo->number % (philo->args)[T_PHILO] == 0)
+	if (philo->number == 1)
 	{
-		if (!pthread_mutex_lock((philo->mutexes)[philo->number % \
-												(philo->args)[T_PHILO]]))
-		{
-			p_take_a_fork(philo);
-			philo->first_fork = 1;
-			return (0);
-		}
-		else
+		if (*(long *)(philo->mutexes)[philo->number % (philo->args)[T_PHILO]])
 			return (1);
+		pthread_mutex_lock((philo->mutexes)[philo->number % (philo->args)[T_PHILO]]);
 	}
 	else
 	{
-		if (!pthread_mutex_lock((philo->mutexes)[philo->number - 1]))
-		{
-			p_take_a_fork(philo);
-			philo->first_fork = 1;
-			return (0);
-		}
-		else
+		if (*(long *)(philo->mutexes)[philo->number - 1])
 			return (1);
+		pthread_mutex_lock((philo->mutexes)[philo->number - 1]);
 	}
-	return (1);
+	p_take_a_fork(philo);
+	return (0);
 }
 
 static int	take_second_fork(t_philo *philo)
 {
-	if (philo->second_fork || (philo->args)[T_PHILO] == 1)
-		return (1);
-	if (philo->number % (philo->args)[T_PHILO] == 0)
+	if (philo->number == 1)
 	{
-		if (!pthread_mutex_lock((philo->mutexes)[philo->number - 1]))
-		{
-			p_take_a_fork(philo);
-			philo->second_fork = 1;
-			return (0);
-		}
-		else
+		if (*(long *)(philo->mutexes)[philo->number - 1])
 			return (1);
+		pthread_mutex_lock((philo->mutexes)[philo->number - 1]);
 	}
 	else
 	{
-		if (!pthread_mutex_lock((philo->mutexes)[philo->number % \
-												(philo->args)[T_PHILO]]))
-		{
-			p_take_a_fork(philo);
-			philo->second_fork = 1;
-			return (0);
-		}
-		else
+		if (*(long *)(philo->mutexes)[philo->number % (philo->args)[T_PHILO]])
 			return (1);
+		pthread_mutex_lock((philo->mutexes)[philo->number % (philo->args)[T_PHILO]]);
 	}
-	return (1);
+	p_take_a_fork(philo);
+	return (0);
 }
 
 int	check_for_death(size_t start_of_action, t_philo *philo)
@@ -78,23 +54,20 @@ int	check_for_death(size_t start_of_action, t_philo *philo)
 
 	time = get_timestamp();
 	if ((time - start_of_action) >= (size_t)(philo->args)[T_DIE])
+	{
+		philo->data->died = philo->number;
 		return (1);
+	}
 	return (0);
 }
 
-static int	take_a_fork(t_philo *philo, int (*f)(t_philo *philo))
+int	take_a_fork(t_philo *philo, int (*f)(t_philo *philo))
 {
-	int	death;
-
-	while (f(philo))
+	while (!check_for_death(philo->last_meal, philo) && f(philo))
 	{
-		death = check_for_death(philo->last_meal, philo);
-		if (death)
-		{
-			philo->data->died = philo->number;
-			return (0);
-		}
 	}
+	if (philo->data->died)
+		return (0);
 	return (1);
 }
 
@@ -111,18 +84,16 @@ int	do_action(t_action ac, t_philo *philo)
 		philo->last_meal = p_eat(philo);
 		philo->times_eaten += 1;
 		usleep(philo->args[T_EAT] * 1000);
-		pthread_mutex_unlock((philo->mutexes)[philo->number % \
-											(philo->args)[T_PHILO]]);
-		philo->first_fork = 0;
+		pthread_mutex_unlock((philo->mutexes)[philo->number % (philo->args)[T_PHILO]]);
 		pthread_mutex_unlock((philo->mutexes)[philo->number - 1]);
-		philo->second_fork = 0;
 	}
 	else if (ac == SLEEP)
 	{
 		time = get_timestamp();
-		if ((time + philo->args[T_SLEEP]) > (size_t)(philo->last_meal + \
-											philo->args[T_DIE]))
+		if ((time + philo->args[T_SLEEP]) >= (size_t)(philo->last_meal + philo->args[T_DIE]))
 		{
+			p_sleep(philo);
+			usleep(((size_t)(philo->last_meal + philo->args[T_DIE]) - time) * 1000);
 			philo->data->died = philo->number;
 			return (0);
 		}

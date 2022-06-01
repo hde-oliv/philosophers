@@ -12,6 +12,25 @@
 
 #include "philo.h"
 
+void	ft_bzero(void *s, size_t n)
+{
+	while (n-- > 0)
+		*(unsigned char *)s++ = 0;
+}
+
+void	*ft_calloc(size_t count, size_t size)
+{
+	void	*p;
+
+	p = malloc(count * size);
+	if (p == NULL)
+		return (NULL);
+	if (count * size == 0)
+		return (p);
+	ft_bzero(p, count * size);
+	return (p);
+}
+
 void	create_data_struct(t_data **data, int arr[5])
 {
 	struct timeval	time;
@@ -24,6 +43,7 @@ void	create_data_struct(t_data **data, int arr[5])
 																	* arr[0]);
 	(*data)->start_time = get_timestamp();
 	(*data)->args = arr;
+	(*data)->trylock = ft_calloc(sizeof(int), arr[0]);
 }
 
 t_philo	*create_philo_data(int *args, int number, t_data *data)
@@ -38,8 +58,6 @@ t_philo	*create_philo_data(int *args, int number, t_data *data)
 	philo->times_eaten = 0;
 	philo->data = data;
 	philo->mutexes = data->mutexes;
-	philo->first_fork = 0;
-	philo->second_fork = 0;
 	return (philo);
 }
 

@@ -55,7 +55,7 @@ void	destroy_everything(t_data *data)
 	free(data);
 }
 
-static void	*watcher_routine(void *watcher_data)
+void	*watcher_routine(void *watcher_data)
 {
 	t_data	*data;
 

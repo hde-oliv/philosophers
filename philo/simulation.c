@@ -15,10 +15,13 @@
 static void	*philo_routine(void *philo_data)
 {
 	t_philo	*philo;
+	size_t	delay;
 
 	philo = (t_philo *)philo_data;
-	while (!philo->data->died && ((philo->args)[T_LOOP] != 0))
+	while (!philo->data->died)
 	{
+		delay = philo->number * 200;
+		usleep(delay);
 		if (!philo->data->died && !do_action(FIRST_FORK, philo))
 			break ;
 		if (!philo->data->died && !do_action(SECOND_FORK, philo))
@@ -26,8 +29,6 @@ static void	*philo_routine(void *philo_data)
 		if (!philo->data->died && !do_action(EAT, philo))
 			break ;
 		if (!philo->data->died && !do_action(SLEEP, philo))
-			break ;
-		if (!philo->data->died && !do_action(THINK, philo))
 			break ;
 	}
 	return (NULL);

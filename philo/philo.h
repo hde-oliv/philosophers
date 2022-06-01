@@ -52,6 +52,7 @@ typedef struct s_data
 	int				died;
 	size_t			start_time;
 	int				*args;
+	int				*trylock;
 	pthread_t		**philos;
 	pthread_mutex_t	**mutexes;
 	void			*t_philos;
@@ -65,8 +66,6 @@ typedef struct s_philo
 	int				times_eaten;
 	size_t			start_time;
 	t_data			*data;
-	int				first_fork;
-	int				second_fork;
 	pthread_mutex_t	**mutexes;
 }	t_philo;
 
