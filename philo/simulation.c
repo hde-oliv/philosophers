@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   simulation.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hde-oliv <hde-oliv@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: coder <coder@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/28 22:06:33 by hde-oliv          #+#    #+#             */
-/*   Updated: 2022/05/28 22:06:34 by hde-oliv         ###   ########.fr       */
+/*   Updated: 2022/06/03 02:47:48 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,17 @@
 static void	*philo_routine(void *philo_data)
 {
 	t_philo	*philo;
-	size_t	delay;
 
 	philo = (t_philo *)philo_data;
-	while (!philo->data->died)
+	while (!*(philo->died) && (philo->times_eaten != philo->args[T_LOOP]))
 	{
-		delay = philo->number * 200;
-		usleep(delay);
-		if (!philo->data->died && !do_action(FIRST_FORK, philo))
+		if (!*(philo->died) && !do_action(FIRST_FORK, philo))
 			break ;
-		if (!philo->data->died && !do_action(SECOND_FORK, philo))
+		if (!*(philo->died) && !do_action(SECOND_FORK, philo))
 			break ;
-		if (!philo->data->died && !do_action(EAT, philo))
+		if (!*(philo->died) && !do_action(EAT, philo))
 			break ;
-		if (!philo->data->died && !do_action(SLEEP, philo))
+		if (!*(philo->died) && !do_action(SLEEP, philo))
 			break ;
 	}
 	return (NULL);

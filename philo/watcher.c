@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   watcher.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hde-oliv <hde-oliv@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: coder <coder@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/28 22:06:46 by hde-oliv          #+#    #+#             */
-/*   Updated: 2022/05/28 22:06:47 by hde-oliv         ###   ########.fr       */
+/*   Updated: 2022/06/02 03:29:10 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ void	*watcher_routine(void *watcher_data)
 	t_data	*data;
 
 	data = watcher_data;
-	while (!data->died && must_continue(data))
-		usleep(1000);
+	while (!data->died)
+		usleep(10);
 	if (data->died)
 	{
 		p_die((((t_philo **)data->t_philos))[data->died - 1]);

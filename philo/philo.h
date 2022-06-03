@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hde-oliv <hde-oliv@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: coder <coder@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/28 22:06:25 by hde-oliv          #+#    #+#             */
-/*   Updated: 2022/05/28 22:06:26 by hde-oliv         ###   ########.fr       */
+/*   Updated: 2022/06/02 03:49:50 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ typedef struct s_data
 	pthread_t		**philos;
 	pthread_mutex_t	**mutexes;
 	void			*t_philos;
+	size_t			death_timestamp;
 }	t_data;
 
 typedef struct s_philo
@@ -67,6 +68,8 @@ typedef struct s_philo
 	size_t			start_time;
 	t_data			*data;
 	pthread_mutex_t	**mutexes;
+	size_t			*death_timestamp;
+	int				*died;
 }	t_philo;
 
 // Prints

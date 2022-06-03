@@ -4,7 +4,7 @@ OBJ	:=	$(SRC:.c=.o)
 
 CC		:=	gcc
 
-CFLAGS	+=	-Wall -Wextra -Werror -pthread -g
+CFLAGS	+=	-Wall -Wextra -Werror -lpthread
 
 RM		:=	rm -rf
 

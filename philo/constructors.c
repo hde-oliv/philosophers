@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   constructors.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hde-oliv <hde-oliv@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: coder <coder@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/28 22:06:20 by hde-oliv          #+#    #+#             */
-/*   Updated: 2022/05/28 22:06:21 by hde-oliv         ###   ########.fr       */
+/*   Updated: 2022/06/02 03:55:37 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ t_philo	*create_philo_data(int *args, int number, t_data *data)
 	philo->times_eaten = 0;
 	philo->data = data;
 	philo->mutexes = data->mutexes;
+	philo->death_timestamp = &(data->death_timestamp);
+	philo->died = &(data->died);
 	return (philo);
 }
 
