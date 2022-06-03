@@ -6,7 +6,7 @@
 /*   By: coder <coder@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/28 22:06:46 by hde-oliv          #+#    #+#             */
-/*   Updated: 2022/06/02 03:29:10 by coder            ###   ########.fr       */
+/*   Updated: 2022/06/03 03:05:58 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	*watcher_routine(void *watcher_data)
 	data = watcher_data;
 	while (!data->died)
 		usleep(10);
-	if (data->died)
+	if (data->died && must_continue(data))
 	{
 		p_die((((t_philo **)data->t_philos))[data->died - 1]);
 		return (NULL);
