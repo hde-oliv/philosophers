@@ -6,7 +6,7 @@
 /*   By: coder <coder@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/28 22:06:33 by hde-oliv          #+#    #+#             */
-/*   Updated: 2022/06/03 02:47:48 by coder            ###   ########.fr       */
+/*   Updated: 2022/06/03 03:17:06 by coder            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ static void	*philo_routine(void *philo_data)
 	philo = (t_philo *)philo_data;
 	while (!*(philo->died) && (philo->times_eaten != philo->args[T_LOOP]))
 	{
+		usleep(200 * philo->number);
 		if (!*(philo->died) && !do_action(FIRST_FORK, philo))
 			break ;
 		if (!*(philo->died) && !do_action(SECOND_FORK, philo))
