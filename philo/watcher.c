@@ -11,12 +11,12 @@
 /* ************************************************************************** */
 
 #include "philo.h"
-#include <stddef.h>
 
 int	check_if_must_continue(t_data *data)
 {
 	int		i;
 	int		eaten;
+	size_t	meal;
 	t_philo	**philos;
 
 	i = (data->args[T_PHILO]) - 1;
@@ -24,7 +24,8 @@ int	check_if_must_continue(t_data *data)
 	philos = data->t_philos;
 	while (i != -1)
 	{
-		if ((get_timestamp() - (philos[i])->last_meal) > (size_t)data->args[T_DIE])
+		meal = (philos[i])->last_meal;
+		if ((get_timestamp() - meal) > (size_t)data->args[T_DIE])
 		{
 			p_die(get_timestamp(), philos[i]);
 			return (1);

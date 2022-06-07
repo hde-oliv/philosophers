@@ -1,4 +1,4 @@
-SRC	:=	main.c check.c utils.c print.c simulation.c time.c constructors.c watcher.c
+SRC	:=	main.c check.c utils.c print.c simulation.c time.c constructors.c watcher.c actions.c
 
 OBJ	:=	$(SRC:.c=.o)
 

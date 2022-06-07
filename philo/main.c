@@ -31,10 +31,9 @@ int	main(int argc, char *argv[])
 
 	args = &argv[1];
 	if (argc < 5 || argc > 6)
-		return (printf(RED "Error: " RESET "Invalid argument list\n"));
+		return (printf("Error: Invalid argument list\n"));
 	if (!arguments_are_valid(argc - 1, args))
-		return (printf(RED "Error: " RESET \
-					"Invalid argument in argument list\n"));
+		return (printf("Error: Invalid argument in argument list\n"));
 	create_int_args_array(args, argc, arr);
 	start_simulation(arr);
 	return (0);

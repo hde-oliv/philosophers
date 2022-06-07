@@ -12,40 +12,6 @@
 
 #include "philo.h"
 
-static void *one_philosopher(t_philo *philo)
-{
-	p_take_a_fork(get_timestamp(), philo);
-	usleep(philo->t_die * 1000);
-	p_die(get_timestamp(), philo);
-	philo->data->simulation = 1;
-	return (NULL);
-}
-
-static void eat(t_philo *philo)
-{
-	pthread_mutex_lock((philo->mutexes)[philo->first_fork]);
-	if (philo->data->simulation)
-	{
-		pthread_mutex_unlock((philo->mutexes)[philo->first_fork]);
-		return ;
-	}
-	p_take_a_fork(get_timestamp(), philo);
-	pthread_mutex_lock((philo->mutexes)[philo->second_fork]);
-	if (philo->data->simulation)
-	{
-		pthread_mutex_unlock((philo->mutexes)[philo->first_fork]);
-		pthread_mutex_unlock((philo->mutexes)[philo->second_fork]);
-		return ;
-	}
-	p_take_a_fork(get_timestamp(), philo);
-	philo->last_meal = get_timestamp();
-	p_eat(philo->last_meal, philo);
-	usleep(philo->t_eat * 1000);
-	pthread_mutex_unlock((philo->mutexes)[philo->first_fork]);
-	pthread_mutex_unlock((philo->mutexes)[philo->second_fork]);
-	philo->times_eaten += 1;
-}
-
 static void	*philo_routine(void *philo_data)
 {
 	t_philo	*philo;
@@ -56,14 +22,11 @@ static void	*philo_routine(void *philo_data)
 	usleep(philo->number * 300);
 	while (!philo->data->simulation)
 	{
+		if (!take_forks(philo))
+			break ;
 		eat(philo);
-		if (philo->data->simulation)
+		if (!sleep_and_think(philo))
 			break ;
-		p_sleep(get_timestamp(), philo);
-		usleep(philo->t_sleep * 1000);
-		if (philo->data->simulation)
-			break ;
-		p_think(get_timestamp(), philo);
 	}
 	return (NULL);
 }

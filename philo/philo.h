@@ -17,17 +17,7 @@
 # include <sys/time.h>
 # include <stdlib.h>
 # include <bits/pthreadtypes.h>
-# include <pthread.h>
 # include <unistd.h>
-
-# define BOLD		"\001\x1b[1m\002"
-# define RED		"\001\x1b[31m\002"
-# define GREEN 		"\001\x1b[32m\002"
-# define YELLOW		"\001\x1b[33m\002"
-# define BLUE		"\001\x1b[34m\002"
-# define MAGENTA	"\001\x1b[35m\002"
-# define CYAN		"\001\x1b[36m\002"
-# define RESET		"\001\x1b[0m\002"
 
 enum e_philo
 {
@@ -37,16 +27,6 @@ enum e_philo
 	T_SLEEP,
 	T_LOOP,
 };
-
-typedef enum e_action
-{
-	FIRST_FORK,
-	SECOND_FORK,
-	EAT,
-	SLEEP,
-	THINK,
-	DIE,
-}	t_action;
 
 typedef struct s_data
 {
@@ -110,6 +90,10 @@ void		create_array_of_philo_data(t_philo ***p_arr, \
 void		create_watcher(t_data *data);
 void		destroy_everything(t_data *data);
 
-// Action
-int			do_action(t_action ac, t_philo *philo);
+// Actions
+void		*one_philosopher(t_philo *philo);
+int			sleep_and_think(t_philo *philo);
+void		eat(t_philo *philo);
+int			take_forks(t_philo *philo);
+
 #endif
