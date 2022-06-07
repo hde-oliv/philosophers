@@ -81,10 +81,10 @@ size_t		get_timestamp(void);
 int			start_simulation(int arr[5]);
 
 // Constructors
-void		create_data_struct(t_data **data, int arr[5]);
+int			create_data_struct(t_data **data, int arr[5]);
 t_philo		*create_philo_data(int *args, int number, t_data *data);
-void		create_array_of_philo_data(t_philo ***p_arr, \
-									int arr[5], t_data **data);
+int			create_array_of_philo_data(t_philo ***p_arr, int arr[5], \
+										t_data **data);
 
 // Watcher
 void		create_watcher(t_data *data);

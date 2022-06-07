@@ -12,14 +12,28 @@
 
 #include "philo.h"
 
-void	create_data_struct(t_data **data, int arr[5])
+int	create_data_struct(t_data **data, int arr[5])
 {
 	(*data) = malloc(sizeof(t_data));
+	if (!(*data))
+		return (1);
 	(*data)->simulation = 0;
 	(*data)->philos = malloc(sizeof(pthread_t *) * arr[0]);
+	if (!(*data)->philos)
+	{
+		free((*data));
+		return (1);
+	}
 	(*data)->mutexes = malloc(sizeof(pthread_mutex_t *) * arr[0]);
+	if (!(*data)->mutexes)
+	{
+		free((*data)->philos);
+		free((*data));
+		return (1);
+	}
 	(*data)->args = arr;
 	(*data)->start_time = get_timestamp();
+	return (0);
 }
 
 t_philo	*create_philo_data(int *args, int number, t_data *data)
@@ -27,6 +41,8 @@ t_philo	*create_philo_data(int *args, int number, t_data *data)
 	t_philo	*philo;
 
 	philo = (t_philo *)malloc(sizeof(t_philo));
+	if (!philo)
+		return (NULL);
 	philo->t_die = args[T_DIE];
 	philo->t_eat = args[T_EAT];
 	philo->t_sleep = args[T_SLEEP];
@@ -43,11 +59,13 @@ t_philo	*create_philo_data(int *args, int number, t_data *data)
 	return (philo);
 }
 
-void	create_array_of_philo_data(t_philo ***p_arr, int arr[5], t_data **data)
+int	create_array_of_philo_data(t_philo ***p_arr, int arr[5], t_data **data)
 {
 	int		i;
 
 	(*p_arr) = (t_philo **)malloc(sizeof(t_philo *) * arr[0]);
+	if (!(*p_arr))
+		return (1);
 	i = arr[0] - 1;
 	while (i != -1)
 	{
@@ -55,4 +73,5 @@ void	create_array_of_philo_data(t_philo ***p_arr, int arr[5], t_data **data)
 		i--;
 	}
 	(*data)->t_philos = *p_arr;
+	return (0);
 }

@@ -37,7 +37,8 @@ int	start_simulation(int arr[5])
 	t_data			*data;
 	int				i;
 
-	create_data_struct(&data, arr);
+	if (create_data_struct(&data, arr))
+		return (1);
 	i = arr[0] - 1;
 	while (i != -1)
 	{
@@ -46,7 +47,8 @@ int	start_simulation(int arr[5])
 		pthread_mutex_init((data->mutexes)[i], NULL);
 		i--;
 	}
-	create_array_of_philo_data(&philos, arr, &data);
+	if (create_array_of_philo_data(&philos, arr, &data))
+		return (1);
 	i = arr[0];
 	while (i-- != 0)
 		pthread_create((data->philos)[i], NULL, &philo_routine, philos[i]);
