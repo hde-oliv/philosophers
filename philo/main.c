@@ -19,7 +19,7 @@ void	create_int_args_array(char **args, int argc, int arr[5])
 	arr[2] = ft_atoi(args[2]);
 	arr[3] = ft_atoi(args[3]);
 	if (argc != 6)
-		arr[4] = -1;
+		arr[4] = 0;
 	else
 		arr[4] = ft_atoi(args[4]);
 }

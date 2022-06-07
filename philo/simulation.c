@@ -12,24 +12,58 @@
 
 #include "philo.h"
 
+static void *one_philosopher(t_philo *philo)
+{
+	p_take_a_fork(get_timestamp(), philo);
+	usleep(philo->t_die * 1000);
+	p_die(get_timestamp(), philo);
+	philo->data->simulation = 1;
+	return (NULL);
+}
+
+static void eat(t_philo *philo)
+{
+	pthread_mutex_lock((philo->mutexes)[philo->first_fork]);
+	if (philo->data->simulation)
+	{
+		pthread_mutex_unlock((philo->mutexes)[philo->first_fork]);
+		return ;
+	}
+	p_take_a_fork(get_timestamp(), philo);
+	pthread_mutex_lock((philo->mutexes)[philo->second_fork]);
+	if (philo->data->simulation)
+	{
+		pthread_mutex_unlock((philo->mutexes)[philo->first_fork]);
+		pthread_mutex_unlock((philo->mutexes)[philo->second_fork]);
+		return ;
+	}
+	p_take_a_fork(get_timestamp(), philo);
+	philo->last_meal = get_timestamp();
+	p_eat(philo->last_meal, philo);
+	usleep(philo->t_eat * 1000);
+	pthread_mutex_unlock((philo->mutexes)[philo->first_fork]);
+	pthread_mutex_unlock((philo->mutexes)[philo->second_fork]);
+	philo->times_eaten += 1;
+}
+
 static void	*philo_routine(void *philo_data)
 {
 	t_philo	*philo;
-	size_t	delay;
 
-	philo = (t_philo *)philo_data;
-	while (!philo->data->died)
+	philo = philo_data;
+	if (philo->t_philo == 1)
+		return (one_philosopher(philo));
+	usleep(philo->number * 300);
+	while (!philo->data->simulation)
 	{
-		delay = philo->number * 200;
-		usleep(delay);
-		if (!philo->data->died && !do_action(FIRST_FORK, philo))
+		eat(philo);
+		if (philo->data->simulation)
 			break ;
-		if (!philo->data->died && !do_action(SECOND_FORK, philo))
+		p_sleep(get_timestamp(), philo);
+		usleep(philo->t_sleep * 1000);
+		if (philo->data->simulation)
 			break ;
-		if (!philo->data->died && !do_action(EAT, philo))
-			break ;
-		if (!philo->data->died && !do_action(SLEEP, philo))
-			break ;
+		p_think(get_timestamp(), philo);
 	}
 	return (NULL);
 }
@@ -53,8 +87,8 @@ int	start_simulation(int arr[5])
 	i = arr[0];
 	while (i-- != 0)
 		pthread_create((data->philos)[i], NULL, &philo_routine, philos[i]);
-	create_watcher(data);
 	i = arr[0];
+	create_watcher(data);
 	while (i-- != 0)
 		pthread_join(*(data->philos)[i], NULL);
 	destroy_everything(data);

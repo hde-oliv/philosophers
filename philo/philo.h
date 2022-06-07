@@ -45,14 +45,14 @@ typedef enum e_action
 	EAT,
 	SLEEP,
 	THINK,
+	DIE,
 }	t_action;
 
 typedef struct s_data
 {
-	int				died;
+	int				simulation;
 	size_t			start_time;
 	int				*args;
-	int				*trylock;
 	pthread_t		**philos;
 	pthread_mutex_t	**mutexes;
 	void			*t_philos;
@@ -60,21 +60,27 @@ typedef struct s_data
 
 typedef struct s_philo
 {
-	int				*args;
 	int				number;
+	int				t_die;
+	int				t_eat;
+	int				t_sleep;
+	int				t_loop;
+	int				t_philo;
+	int				first_fork;
+	int				second_fork;
 	size_t			last_meal;
-	int				times_eaten;
 	size_t			start_time;
+	int				times_eaten;
 	t_data			*data;
 	pthread_mutex_t	**mutexes;
 }	t_philo;
 
 // Prints
-void		p_take_a_fork(t_philo *philo);
-size_t		p_eat(t_philo *philo);
-void		p_sleep(t_philo *philo);
-void		p_think(t_philo *philo);
-void		p_die(t_philo *philo);
+void		p_take_a_fork(size_t time, t_philo *philo);
+void		p_eat(size_t time, t_philo *philo);
+void		p_sleep(size_t time, t_philo *philo);
+void		p_think(size_t time, t_philo *philo);
+void		p_die(size_t time, t_philo *philo);
 
 // Check
 int			check_int_extremes(char **args, int size);

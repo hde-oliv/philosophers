@@ -12,36 +12,28 @@
 
 #include "philo.h"
 
-void	p_take_a_fork(t_philo *philo)
+void	p_take_a_fork(size_t time, t_philo *philo)
 {
-	printf(YELLOW "%ld " RESET BLUE "%d " RESET "has taken a fork\n", \
-			(get_timestamp() - philo->start_time), philo->number);
+	printf(YELLOW "%ld " RESET BLUE "%d " RESET "has taken a fork\n", (time - philo->start_time), philo->number);
 }
 
-size_t	p_eat(t_philo *philo)
+void	p_eat(size_t time, t_philo *philo)
 {
-	size_t	time;
-
-	time = get_timestamp();
-	printf(YELLOW "%ld " RESET BLUE "%d " RESET "is eating\n", \
-			(time - philo->start_time), philo->number);
-	return (time);
+	printf(YELLOW "%ld " RESET BLUE "%d " RESET "is eating\n", (time - philo->start_time), philo->number);
 }
 
-void	p_sleep(t_philo *philo)
+void	p_sleep(size_t time, t_philo *philo)
 {
-	printf(YELLOW "%ld " RESET BLUE "%d " RESET "is sleeping\n", \
-			(get_timestamp() - philo->start_time), philo->number);
+	printf(YELLOW "%ld " RESET BLUE "%d " RESET "is sleeping\n", (time - philo->start_time), philo->number);
 }
 
-void	p_think(t_philo *philo)
+void	p_think(size_t time, t_philo *philo)
 {
-	printf(YELLOW "%ld " RESET BLUE "%d " RESET "is thinking\n", \
-			(get_timestamp() - philo->start_time), philo->number);
+	printf(YELLOW "%ld " RESET BLUE "%d " RESET "is thinking\n", (time - philo->start_time), philo->number);
 }
 
-void	p_die(t_philo *philo)
+void	p_die(size_t time, t_philo *philo)
 {
-	printf(YELLOW "%ld " RESET RED "%d died\n" RESET, \
-			(get_timestamp() - philo->start_time), philo->number);
+	if (!philo->data->simulation)
+		printf(YELLOW "%ld " RESET RED "%d died\n" RESET, (time - philo->start_time), philo->number);
 }

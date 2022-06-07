@@ -11,27 +11,52 @@
 /* ************************************************************************** */
 
 #include "philo.h"
+#include <stddef.h>
 
-int	must_continue(t_data *data)
+int	check_if_must_continue(t_data *data)
 {
 	int		i;
 	int		eaten;
 	t_philo	**philos;
 
-	if ((data->args[T_LOOP]) == -1)
-		return (1);
 	i = (data->args[T_PHILO]) - 1;
 	eaten = 0;
 	philos = data->t_philos;
 	while (i != -1)
 	{
+		if ((get_timestamp() - (philos[i])->last_meal) > (size_t)data->args[T_DIE])
+		{
+			p_die(get_timestamp(), philos[i]);
+			return (1);
+		}
 		if ((philos[i])->times_eaten >= (data->args)[T_LOOP])
 			eaten++;
 		i--;
 	}
-	if (eaten >= (data->args)[T_PHILO])
-		return (0);
-	return (1);
+	if (data->args[T_LOOP] && (eaten >= (data->args)[T_PHILO]))
+		return (1);
+	return (0);
+}
+
+void	*watcher_routine(void *watcher_data)
+{
+	t_data	*data;
+
+	data = watcher_data;
+	while (!data->simulation)
+	{
+		data->simulation = check_if_must_continue(data);
+		usleep(1000);
+	}
+	return (NULL);
+}
+
+void	create_watcher(t_data *data)
+{
+	pthread_t	watcher;
+
+	pthread_create(&watcher, NULL, &watcher_routine, data);
+	pthread_join(watcher, NULL);
 }
 
 void	destroy_everything(t_data *data)
@@ -53,28 +78,4 @@ void	destroy_everything(t_data *data)
 	free(data->philos);
 	free(philos);
 	free(data);
-}
-
-void	*watcher_routine(void *watcher_data)
-{
-	t_data	*data;
-
-	data = watcher_data;
-	while (!data->died && must_continue(data))
-		usleep(1000);
-	if (data->died)
-	{
-		p_die((((t_philo **)data->t_philos))[data->died - 1]);
-		return (NULL);
-	}
-	data->died = 1;
-	return (NULL);
-}
-
-void	create_watcher(t_data *data)
-{
-	pthread_t	watcher;
-
-	pthread_create(&watcher, NULL, &watcher_routine, data);
-	pthread_join(watcher, NULL);
 }

@@ -12,38 +12,14 @@
 
 #include "philo.h"
 
-void	ft_bzero(void *s, size_t n)
-{
-	while (n-- > 0)
-		*(unsigned char *)s++ = 0;
-}
-
-void	*ft_calloc(size_t count, size_t size)
-{
-	void	*p;
-
-	p = malloc(count * size);
-	if (p == NULL)
-		return (NULL);
-	if (count * size == 0)
-		return (p);
-	ft_bzero(p, count * size);
-	return (p);
-}
-
 void	create_data_struct(t_data **data, int arr[5])
 {
-	struct timeval	time;
-
-	gettimeofday(&time, NULL);
-	(*data) = (t_data *)malloc(sizeof(t_data));
-	(*data)->died = 0;
-	(*data)->philos = (pthread_t **)malloc(sizeof(pthread_t *) * arr[0]);
-	(*data)->mutexes = (pthread_mutex_t **)malloc(sizeof(pthread_mutex_t *) \
-																	* arr[0]);
-	(*data)->start_time = get_timestamp();
+	(*data) = malloc(sizeof(t_data));
+	(*data)->simulation = 0;
+	(*data)->philos = malloc(sizeof(pthread_t *) * arr[0]);
+	(*data)->mutexes = malloc(sizeof(pthread_mutex_t *) * arr[0]);
 	(*data)->args = arr;
-	(*data)->trylock = ft_calloc(sizeof(int), arr[0]);
+	(*data)->start_time = get_timestamp();
 }
 
 t_philo	*create_philo_data(int *args, int number, t_data *data)
@@ -51,11 +27,17 @@ t_philo	*create_philo_data(int *args, int number, t_data *data)
 	t_philo	*philo;
 
 	philo = (t_philo *)malloc(sizeof(t_philo));
-	philo->args = args;
+	philo->t_die = args[T_DIE];
+	philo->t_eat = args[T_EAT];
+	philo->t_sleep = args[T_SLEEP];
+	philo->t_loop = args[T_LOOP];
+	philo->t_philo = args[T_PHILO];
 	philo->number = number + 1;
-	philo->last_meal = data->start_time;
-	philo->start_time = data->start_time;
 	philo->times_eaten = 0;
+	philo->first_fork = number;
+	philo->second_fork = (number + 1) % args[T_PHILO];
+	philo->start_time = data->start_time;
+	philo->last_meal = data->start_time;
 	philo->data = data;
 	philo->mutexes = data->mutexes;
 	return (philo);
