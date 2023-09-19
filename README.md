@@ -1,6 +1,9 @@
 # Philosophers
 
-![Example](./assets/example.gif)
+<div align="center">
+  <img src="./assets/example.gif"/>
+</div>  
+
 
 ## What is it?
 A project to solve the 42 version of the classic [Dining Philosophers Problem](https://en.wikipedia.org/wiki/Dining_philosophers_problem), used in concurrent algorithm design, to illustrate synchronization issues and techniques for resolving them. 
