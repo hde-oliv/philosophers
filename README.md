@@ -61,5 +61,5 @@ Example:
 Feel free to contact me or create an issue!
 
 ## License
-This project is licensed under the GNU General Public License v3.0 - see the [COPYING](https://github.com/hde-oliv/minitalk/blob/master/COPYING) file for details.
+This project is licensed under the GNU General Public License v3.0 - see the [COPYING](https://github.com/hde-oliv/philosophers/blob/master/COPYING) file for details.
 
